@@ -2,7 +2,7 @@ CC  = cc
 CFLAGS = -Wall -Wextra -Werror -I libft
 NAME = pipex
 DEPS = pipex.h
-SRCS = pipex.c
+SRCS = pipex.c get_path.c
 OBJS = $(SRCS:.c=.o)
 LIBDIR = ./libft
 LIBMAKE = $(LIBDIR)/libft.a
