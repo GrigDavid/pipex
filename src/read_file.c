@@ -1,23 +1,17 @@
 #include "../pipex.h"
 
-char	*read_file(char *file)
+char	*read_fd(int fd)
 {
 	char	*res;
 	char	*tmp;
-	int		fd;
-
-	res = NULL;
 	
-	fd = open (file, O_RDONLY);
-	if (fd == -1)
-		return(NULL);
+	res = NULL;
 	tmp = ft_calloc(sizeof(char), 101);
 	if (!tmp)
 		return(NULL);
 	tmp = get_next_line(fd);
 	while (tmp)
 	{
-		//printf("%s\n", tmp);
 		if (!res)
 			res = tmp;//malloc protection=(
 		else
@@ -32,6 +26,18 @@ char	*read_file(char *file)
 		}
 		tmp = get_next_line(fd);
 	}
-	//printf("hey %s\n", res);
-	return (res);
+	return(res);
+}
+
+char	*read_file(char *file)
+{
+
+	int		fd;
+
+	
+	
+	fd = open (file, O_RDONLY);
+	if (fd == -1)
+		return(NULL);
+	return (read_fd(fd));
 }

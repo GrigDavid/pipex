@@ -11,5 +11,6 @@
 char	*get_path(char **envp);
 char	*set_to_path(char **envp, char *file);
 char	*read_file(char *file);
+char	*read_fd(int fd);
 
 #endif
