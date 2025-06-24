@@ -1,6 +1,5 @@
 #include "../pipex.h"
 
-
 char	*get_path(char **envp)
 {
 	char	*path;

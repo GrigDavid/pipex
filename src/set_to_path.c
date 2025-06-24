@@ -13,6 +13,13 @@ static void	ft_free_mat(char **arr)
 	free(arr);
 }
 
+static int	check_prog(char *file)
+{
+	if (!access(file, F_OK) && !access(file, X_OK))
+		return (1);
+	return (0);
+}
+
 char	*set_to_path(char **envp, char *file)
 {
 	char	*tmp;
@@ -21,28 +28,29 @@ char	*set_to_path(char **envp, char *file)
 
 	i = 0;
 	if (*file == '.' || *file == '/')
-		return (file);
-	paths = ft_split(get_path(envp), ':');
+	{
+		if (check_prog(file))
+			return (file);
+		return (NULL);
+	}
+	tmp = get_path(envp);
+	if (!tmp)
+		return(NULL);
+	paths = ft_split(tmp, ':');
 	if (!paths)
 		return (NULL);
 	file = ft_strjoin("/", file);
 	if (!file)
-		return(NULL);
+		return(ft_free_mat(paths), NULL);
 	while (paths[i])
 	{
 		tmp = ft_strjoin(paths[i++], file);
 		if (!tmp)
-		{
-			ft_free_mat(paths);
-			return (NULL);
-		}
-		if (!access(tmp, F_OK) && !access(tmp, X_OK))
-		{
-			ft_free_mat(paths);
-			return (tmp);
-		}
+			return (free(file), ft_free_mat(paths), NULL);
+		if (check_prog(tmp))
+			return (free(file),ft_free_mat(paths), tmp);
 		free(tmp);
 	}
-	ft_free_mat(paths);
-	return(NULL);
+	return(free(file), ft_free_mat(paths), NULL);
 }
+

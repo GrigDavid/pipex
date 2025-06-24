@@ -1,14 +1,21 @@
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <string.h>
 
-int	main(int argc, char **argv)
+int	main(void)
 {
-	argc++;
-	char	*str;
+	char	*arr;
+	int		len;
 
-	str = (char *)malloc(100);
-	read(0, str, 100);
-	write(1, str, strlen(str));
+	arr = NULL;
+	arr = (char *)calloc(100, 1);
+	if (!arr)
+		return (1);
+	if (read(0, arr, 100) == -1)
+		return (1);
+	write(1, arr, 100);
+	free(arr);
 	return (0);
 }
