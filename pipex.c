@@ -28,15 +28,12 @@ void	kanchox_zibil(char **argv, char **envp)
 
 	if (pipe(p) == -1)
 		return ;
-	file1_fd = open(argv[1], O_RDONLY);
-	if (file1_fd == -1)
-		return ;
-	file2_fd = open(argv[4], O_WRONLY);
-	if (file2_fd == -1)
-		return ;
 	pid = fork();
 	if (pid == 0)
 	{
+		file1_fd = open(argv[1], O_RDONLY);
+		if (file1_fd == -1)
+			return ;
 		x_cmd(file1_fd, p[1], argv[2], envp);
 	}
 	close(p[1]);
