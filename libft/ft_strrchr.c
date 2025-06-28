@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgrigor2 <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dgrigor2 <dgrigor2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 15:21:22 by dgrigor2          #+#    #+#             */
-/*   Updated: 2025/01/29 15:23:45 by dgrigor2         ###   ########.fr       */
+/*   Updated: 2025/06/28 16:50:44 by dgrigor2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,5 @@ char	*ft_strrchr(const char *s, int c)
 			return ((char *)p);
 		p--;
 	}
-	return (0);
+	return (NULL);
 }
