@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_to_path.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgrigor2 <dgrigor2@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/30 16:23:06 by dgrigor2          #+#    #+#             */
+/*   Updated: 2025/06/30 16:55:01 by dgrigor2         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../pipex.h"
 
 static void	ft_free_mat(char **arr)
@@ -15,15 +27,15 @@ static void	ft_free_mat(char **arr)
 
 static char	*ft_strjoin_chr(char *str, char c, char *dst)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
 	char	*res;
 
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == c)
-			break;
+			break ;
 		i++;
 	}
 	len = ft_strlen(dst);
@@ -41,44 +53,43 @@ static char	*ft_strjoin_chr(char *str, char c, char *dst)
 	return (res);
 }
 
-static int	check_prog(char *file)
+static char	*check_prog(char **paths, char *file)
 {
-	if (!access(file, F_OK) && !access(file, X_OK))
-		return (1);
-	return (0);
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	while (paths[i])
+	{
+		tmp = ft_strjoin_chr(file, ' ', paths[i++]);
+		if (!tmp)
+			return (free(file), ft_free_mat(paths), NULL);
+		if (!access(tmp, F_OK) && !access(tmp, X_OK))
+			return (free(file), ft_free_mat(paths), tmp);
+		free(tmp);
+	}
+	return (free(file), ft_free_mat(paths), NULL);
 }
 
 char	*set_to_path(char **envp, char *file)
 {
 	char	*tmp;
 	char	**paths;
-	int		i;
 
-	i = 0;
 	if (*file == '.' || *file == '/')
 	{
-		if (check_prog(file))
+		if (!access(file, F_OK) && !access(file, X_OK))
 			return (file);
 		return (NULL);
 	}
 	tmp = get_path(envp);
 	if (!tmp)
-		return(NULL);
+		return (NULL);
 	paths = ft_split(tmp, ':');
 	if (!paths)
 		return (NULL);
 	file = ft_strjoin("/", file);
 	if (!file)
-		return(ft_free_mat(paths), NULL);
-	while (paths[i])
-	{
-		tmp = ft_strjoin_chr(file, ' ', paths[i++]);
-		if (!tmp)
-			return (free(file), ft_free_mat(paths), NULL);
-		if (check_prog(tmp))
-			return (free(file),ft_free_mat(paths), tmp);
-		free(tmp);
-	}
-	return(free(file), ft_free_mat(paths), NULL);
+		return (ft_free_mat(paths), NULL);
+	return (check_prog(paths, file));
 }
-
