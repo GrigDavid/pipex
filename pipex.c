@@ -6,7 +6,7 @@
 /*   By: dgrigor2 <dgrigor2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 16:22:07 by dgrigor2          #+#    #+#             */
-/*   Updated: 2025/06/30 17:38:19 by dgrigor2         ###   ########.fr       */
+/*   Updated: 2025/07/02 16:32:58 by dgrigor2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,35 +75,55 @@ int	x_cmd(int fd_in, int fd_out, char *name, char **envp)
 
 int	kanchox_zibil(char **argv, char **envp)
 {
-	int	pid;
-	int	file1_fd;
-	int	file2_fd;
+	int	pid1;
+	int	pid2;
+	int	file_fd;
 	int	p[2];
+	int	status;
 
 	if (pipe(p) < 0)
-		return (send_error(envp), 0);
-	pid = fork();
-	if (pid < 0)
-		return (send_error(envp), 0);
-	if (pid == 0)
+		return (send_error(envp), errno);
+	pid1 = fork();
+	if (pid1 < 0)
+		return (send_error(envp), errno);
+	if (pid1 == 0)
 	{
 		close(p[0]);
-		file1_fd = open(argv[1], O_RDONLY);
-		if (file1_fd < 0)
-			return (close(p[1]), send_error(envp), 0);
-		x_cmd(file1_fd, p[1], argv[2], envp);
-		return (0);
+		file_fd = open(argv[1], O_RDONLY);
+		if (file_fd < 0)
+			return (close(p[1]), send_error(envp), errno);
+		x_cmd(file_fd, p[1], argv[2], envp);
+		return (errno);
 	}
+	pid2 = fork();
+	if (pid2 < 0)
+		return (send_error(envp), errno);
+	if (pid2 == 0)
+	{
+		close(p[1]);
+		file_fd = open(argv[4], O_TRUNC | O_WRONLY | O_CREAT, 0644);
+		if (file_fd < 0)
+			return (close(p[0]), send_error(envp), errno);
+		x_cmd(p[0], file_fd, argv[3], envp);
+		return (errno);
+	}
+	close(p[0]);
 	close(p[1]);
-	file2_fd = open(argv[4], O_TRUNC | O_WRONLY | O_CREAT, 0644);
-	if (file2_fd < 0)
-		return (close(p[0]), send_error(envp), 0);
-	x_cmd(p[0], file2_fd, argv[3], envp);
-	return (0);
+	wait(&status);
+	if (WIFEXITED(status))
+		if (WEXITSTATUS(status))
+			return (errno);
+	wait(&status);
+	if (WIFEXITED(status))
+		if (WEXITSTATUS(status))
+			return (errno);
+	return (errno);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
+	char	*tmp;
+	
 	if (argc != 5)
 		return (1);
 	if (!get_shell(envp))
@@ -111,15 +131,21 @@ int	main(int argc, char **argv, char **envp)
 		send_error(envp);
 		return (1);
 	}
-	if (!set_to_path(envp, argv[2]) || !set_to_path(envp, argv[3]))
+	tmp = set_to_path(envp, argv[2]);
+	if (!tmp)
 	{
 		send_error(envp);
 		return (1);
 	}
-
-	if (!kanchox_zibil(argv, envp))
+	free(tmp);
+	tmp = set_to_path(envp, argv[3]);
+	if (!tmp)
+	{
+		send_error(envp);
 		return (1);
-	return (0);
+	}
+	free(tmp);
+	return (kanchox_zibil(argv, envp));
 }
 
 /*

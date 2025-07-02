@@ -6,7 +6,7 @@
 /*   By: dgrigor2 <dgrigor2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 16:23:06 by dgrigor2          #+#    #+#             */
-/*   Updated: 2025/06/30 16:55:01 by dgrigor2         ###   ########.fr       */
+/*   Updated: 2025/07/02 16:28:40 by dgrigor2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ char	*set_to_path(char **envp, char *file)
 	char	*tmp;
 	char	**paths;
 
+	if (!file)
+		return (NULL);
 	if (*file == '.' || *file == '/')
 	{
 		if (!access(file, F_OK) && !access(file, X_OK))
