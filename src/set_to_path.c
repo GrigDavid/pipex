@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   set_to_path.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dgrigor2 <dgrigor2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dgrigor2 <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/30 16:23:06 by dgrigor2          #+#    #+#             */
-/*   Updated: 2025/07/02 16:28:40 by dgrigor2         ###   ########.fr       */
+/*   Created: 2025/07/04 12:56:42 by dgrigor2          #+#    #+#             */
+/*   Updated: 2025/07/04 12:56:45 by dgrigor2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-static void	ft_free_mat(char **arr)
+void	ft_free_mat(char **arr)
 {
 	int	j;
 
@@ -76,13 +76,16 @@ char	*set_to_path(char **envp, char *file)
 	char	*tmp;
 	char	**paths;
 
-	if (!file)
+	if (!file || !*file)
 		return (NULL);
 	if (*file == '.' || *file == '/')
 	{
-		if (!access(file, F_OK) && !access(file, X_OK))
-			return (file);
-		return (NULL);
+		tmp = ft_strjoin_chr(file, ' ', "");
+		if (!tmp)
+			return (NULL);
+		if (!access(tmp, F_OK) && !access(tmp, X_OK))
+			return (tmp);
+		free(tmp);
 	}
 	tmp = get_path(envp);
 	if (!tmp)

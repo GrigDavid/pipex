@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   get_shell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dgrigor2 <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 12:54:13 by dgrigor2          #+#    #+#             */
-/*   Updated: 2025/07/04 12:54:17 by dgrigor2         ###   ########.fr       */
+/*   Created: 2025/07/04 12:56:13 by dgrigor2          #+#    #+#             */
+/*   Updated: 2025/07/04 12:56:14 by dgrigor2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "../pipex.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include "libft.h"
-# include <fcntl.h>
-# include <sys/wait.h>
-# include <errno.h>
+char	*get_shell(char **envp)
+{
+	char	*path;
 
-char	*get_path(char **envp);
-char	*set_to_path(char **envp, char *file);
-void	ft_free_mat(char **arr);
-char	*get_shell(char **envp);
-void	send_error(char **envp);
-
-#endif
+	if (!*envp)
+		return (NULL);
+	while (*envp)
+	{
+		if (ft_strncmp(*envp, "SHELL=", 5))
+			envp++;
+		else
+		{
+			path = *envp + 5;
+			break ;
+		}
+	}
+	if (!*envp)
+		return (NULL);
+	path = ft_strrchr(path, '/') + 1;
+	return (path);
+}

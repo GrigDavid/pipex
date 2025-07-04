@@ -6,7 +6,7 @@
 /*   By: dgrigor2 <dgrigor2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 18:01:02 by dgrigor2          #+#    #+#             */
-/*   Updated: 2025/05/12 14:36:45 by dgrigor2         ###   ########.fr       */
+/*   Updated: 2025/06/30 16:22:45 by dgrigor2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 500
 # endif
 
 # include <stdlib.h>
