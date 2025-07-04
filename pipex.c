@@ -6,13 +6,13 @@
 /*   By: dgrigor2 <dgrigor2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 12:54:32 by dgrigor2          #+#    #+#             */
-/*   Updated: 2025/07/04 12:58:06 by dgrigor2         ###   ########.fr       */
+/*   Updated: 2025/07/04 13:02:54 by dgrigor2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	x_cmd(int fd_in, int fd_out, char *name, char **envp)
+static int	x_cmd(int fd_in, int fd_out, char *name, char **envp)
 {
 	char	**arg;
 	char	*path;
@@ -33,7 +33,7 @@ int	x_cmd(int fd_in, int fd_out, char *name, char **envp)
 	return (0);
 }
 
-int	validate(char *cmd, char **envp)
+static int	validate(char *cmd, char **envp)
 {
 	char	*tmp;
 
@@ -44,7 +44,7 @@ int	validate(char *cmd, char **envp)
 	return (1);
 }
 
-int	call_second_fork(char **argv, char **envp, int pid1, int p[2])
+static int	call_second_fork(char **argv, char **envp, int pid1, int p[2])
 {
 	int	pid2;
 	int	status;
@@ -73,7 +73,7 @@ int	call_second_fork(char **argv, char **envp, int pid1, int p[2])
 	return (0);
 }
 
-int	call_fork(char **argv, char **envp)
+static int	call_fork(char **argv, char **envp)
 {
 	int	pid1;
 	int	file_fd;
